@@ -6,7 +6,7 @@ import abi from './utils/WavePortal.json'
 export default function App() {
   // Creating a state variable to store the user's public wallet address
   const [currAccount, setCurrentAccount] = React.useState("")
-  const contractAddress = "0xF3eC2039E768CbaF4a739aD17d723fD3A58b4Ae9"
+  const contractAddress = "0xA26D8CEee1bBE0579Beb1B32394Ee7ca9B87cC32"
   const contractABI = abi.abi
 
   const checkIfWalletIsConnected = () => {
@@ -30,6 +30,8 @@ export default function App() {
       console.log("Found an authorized account: ", account)
       //Store the user's public wallet address for later!
       setCurrentAccount(account);
+      //I think getAllWaves should get called here
+      getAllWaves()
     } else {
       console.log("No authorized account found")
     }
@@ -58,17 +60,38 @@ const wave = async () => {
   const signer = provider.getSigner();
   const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
   
-  let count = await wavePortalContract.getTotalWaves()
-  console.log("Retrieved total wave count ...", count.toNumber())
+  let waveCount = await wavePortalContract.getTotalWaves()
+  console.log("Retrieved total wave count ...", waveCount.toNumber())
 
-  const waveTxn = await wavePortalContract.wave()
+  const waveTxn = await wavePortalContract.wave("this is a message")
   console.log("Mining...", waveTxn.hash)
   await waveTxn.wait()
   console.log("Mined...", waveTxn.hash)
 
-  count = await wavePortalContract.getTotalWaves()
-  console.log("Retrieved Total Wave Count...", count.toNumber())
+  waveCount = await wavePortalContract.getTotalWaves()
+  console.log("Retrieved Total Wave Count...", waveCount.toNumber())
     
+}
+
+const[allWaves, setAllWaves] = React.useState([])
+async function getAllWaves() {
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+
+  let waves = await wavePortalContract.getAllWaves();
+
+  let wavesCleaned = []
+  waves.forEach(
+    wave => {
+      wavesCleaned.push({
+        address: wave.address,
+        timestamp: new Date(wave.timestamp * 1000),
+        message: wave.message
+      })
+    })
+
+  setAllWaves(wavesCleaned)
 }
   
   return (
@@ -93,7 +116,18 @@ const wave = async () => {
           </button>
         )
         }
+
+        {allWaves.map((wave, index) => {
+          return  (
+            <div style={{backgroundColor: "OldLace", marginTop: "16px", padding: "8px", color: "black"}}>
+              <div>Address: {wave.address}</div>
+              <div>Time: {wave.timestamp.toString()}</div>
+              <div>Message: {wave.message}</div>
+            </div>
+          )
+        })
+        }
       </div>
     </div>
-  );
+  )
 }
