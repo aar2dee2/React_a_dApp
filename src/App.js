@@ -119,10 +119,12 @@ async function getAllWaves() {
 
         {allWaves.map((wave, index) => {
           return  (
-            <div style={{backgroundColor: "OldLace", marginTop: "16px", padding: "8px", color: "black"}}>
-              <div>Address: {wave.address}</div>
-              <div>Time: {wave.timestamp.toString()}</div>
-              <div>Message: {wave.message}</div>
+            <div style={{backgroundColor: "OldLace", marginTop: "16px", padding: "8px", color: "black"}} key={index}>
+              <div key={index}>
+                <h3>Address: {wave.address}</h3>
+                <h4>Time: {wave.timestamp.toString()}</h4>
+                <p>Message: {wave.message}</p>
+              </div>
             </div>
           )
         })
