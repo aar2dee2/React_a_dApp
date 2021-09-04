@@ -5,6 +5,7 @@ import './App.css';
 export default function App() {
   // Creating a state variable to store the user's public wallet address
   const [currAccount, setCurrentAccount] = React.useState("")
+  const contractAddress = "0xF3eC2039E768CbaF4a739aD17d723fD3A58b4Ae9"
 
   const checkIfWalletIsConnected = () => {
     const { ethereum } = window;
@@ -52,6 +53,11 @@ React.useEffect(() => {
 
 const wave = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
+  const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+  
+  let count = await wavePortalContract.getTotalWaves()
+  console.log("Retrieved total wave count ...", count.toNumber())
     
 }
   
