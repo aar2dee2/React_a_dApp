@@ -1,13 +1,16 @@
 import * as React from "react";
 import { ethers } from "ethers";
 import './App.css';
+import abi from './utils/WavePortal.json'
 
 export default function App() {
   // Creating a state variable to store the user's public wallet address
   const [currAccount, setCurrentAccount] = React.useState("")
   const contractAddress = "0xF3eC2039E768CbaF4a739aD17d723fD3A58b4Ae9"
+  const contractABI = abi.abi
 
   const checkIfWalletIsConnected = () => {
+    //First make sure we have access to window.ethereum
     const { ethereum } = window;
     if (!ethereum) {
       console.log("Make sure you have your metamask")
@@ -19,19 +22,18 @@ export default function App() {
   // Check if we're authorized to access the user's wallet
   ethereum.request({ method: 'eth_accounts' })
   .then(accounts => {
+    console.log(accounts)
     //There could be multiple accounts, check for one.
     if(accounts.length !== 0) {
       //Grab the first account we have access to.
       const account = accounts[0];
       console.log("Found an authorized account: ", account)
-
       //Store the user's public wallet address for later!
       setCurrentAccount(account);
     } else {
       console.log("No authorized account found")
     }
   })
-
 }
 
 const connectWallet = () => {
@@ -58,6 +60,14 @@ const wave = async () => {
   
   let count = await wavePortalContract.getTotalWaves()
   console.log("Retrieved total wave count ...", count.toNumber())
+
+  const waveTxn = await wavePortalContract.wave()
+  console.log("Mining...", waveTxn.hash)
+  await waveTxn.wait()
+  console.log("Mined...", waveTxn.hash)
+
+  count = await wavePortalContract.getTotalWaves()
+  console.log("Retrieved Total Wave Count...", count.toNumber())
     
 }
   
@@ -82,9 +92,7 @@ const wave = async () => {
             Connect Wallet
           </button>
         )
-
         }
-
       </div>
     </div>
   );
