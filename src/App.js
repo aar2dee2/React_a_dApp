@@ -6,7 +6,8 @@ import abi from './utils/WavePortal.json'
 export default function App() {
   // Creating a state variable to store the user's public wallet address
   const [currAccount, setCurrentAccount] = React.useState("")
-  const contractAddress = "0x146174774050385ae5383fB6BA4f31dD82d35778"
+  const contractAddress = process.env['contractAddress']
+
   const contractABI = abi.abi
 
   const checkIfWalletIsConnected = () => {
@@ -85,13 +86,22 @@ async function getAllWaves() {
   waves.forEach(
     wave => {
       wavesCleaned.push({
-        address: wave.address,
+        address: wave.waver,
         timestamp: new Date(wave.timestamp * 1000),
         message: wave.message
       })
     })
 
   setAllWaves(wavesCleaned)
+
+  wavePortalContract.on("NewWave", (from, message, timestamp) => {
+    console.log("NewWave", from, message, timestamp);
+    setAllWaves(oldArray => [...oldArray, {
+      address: from,
+      message: message,
+      timestamp: new Date(timestamp * 1000),
+    }])
+  })
 }
   
   return (
