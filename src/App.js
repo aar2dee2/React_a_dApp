@@ -6,8 +6,12 @@ import abi from './utils/WavePortal.json'
 export default function App() {
   // Creating a state variable to store the user's public wallet address
   const [currAccount, setCurrentAccount] = React.useState("")
-  const contractAddress = process.env['contractAddress']
 
+  //const contractAddress = "0x146174774050385ae5383fB6BA4f31dD82d35778"
+  
+  const contractAddress = process.env.contractAddress
+
+  console.log("The contract address is: ", contractAddress)
   const contractABI = abi.abi
 
   const checkIfWalletIsConnected = () => {
