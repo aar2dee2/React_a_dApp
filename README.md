@@ -66,3 +66,6 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
 contractAddress=\"$CONTRACT_ADDRESS\" 
+"0x5FbDB2315678afecb367f032d93F642f64180aa3"
+
+0x2b942C5fC5970CC767817482A60EB35a98171934

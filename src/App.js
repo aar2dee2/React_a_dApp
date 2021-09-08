@@ -7,7 +7,7 @@ export default function App() {
   // Creating a state variable to store the user's public wallet address
   const [currAccount, setCurrentAccount] = React.useState("")
 
-  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+  const contractAddress = "0x2b942C5fC5970CC767817482A60EB35a98171934"
   console.log("Process env contains",process.env)
   //const contractAddress = process.env.CONTRACT_ADDRESS
 
@@ -65,17 +65,17 @@ const wave = async () => {
   const signer = provider.getSigner();
   const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
   
-  //let waveCount = await wavePortalContract.getAllWaves()
-  //console.log("Retrieved total wave count ...", waveCount.toNumber())
+  let waveCount = await wavePortalContract.getTotalWaves()
+  console.log("Retrieved total wave count ...", waveCount.toNumber())
 
-  const waveTxn = await wavePortalContract.wave("this is a message", { gasLimit: 600000 })
-  // waveportalContract.wave(message, { gasLimit: 300000 })
+  const waveTxn = await wavePortalContract.wave("this is a message", { gasLimit: 300000 })
+  // waveportalContract.wave(message, { gasLimit: 3000001})
   console.log("Mining...", waveTxn.hash)
   await waveTxn.wait()
   console.log("Mined...", waveTxn.hash)
 
-  //waveCount = await wavePortalContract.getAllWaves()
-  //console.log("Retrieved Total Wave Count...", waveCount.toNumber())
+  waveCount = await wavePortalContract.getTotalWaves()
+  console.log("Retrieved Total Wave Count...", waveCount.toNumber())
     
 }
 
