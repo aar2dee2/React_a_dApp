@@ -7,9 +7,9 @@ export default function App() {
   // Creating a state variable to store the user's public wallet address
   const [currAccount, setCurrentAccount] = React.useState("")
 
-  //const contractAddress = "0x146174774050385ae5383fB6BA4f31dD82d35778"
-  
-  const contractAddress = process.env.contractAddress
+  const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+  console.log("Process env contains",process.env)
+  //const contractAddress = process.env.CONTRACT_ADDRESS
 
   console.log("The contract address is: ", contractAddress)
   const contractABI = abi.abi
@@ -68,7 +68,8 @@ const wave = async () => {
   let waveCount = await wavePortalContract.getTotalWaves()
   console.log("Retrieved total wave count ...", waveCount.toNumber())
 
-  const waveTxn = await wavePortalContract.wave("this is a message")
+  const waveTxn = await wavePortalContract.wave("this is a message", { gasLimit: 300000 })
+  // waveportalContract.wave(message, { gasLimit: 300000 })
   console.log("Mining...", waveTxn.hash)
   await waveTxn.wait()
   console.log("Mined...", waveTxn.hash)
@@ -79,6 +80,7 @@ const wave = async () => {
 }
 
 const[allWaves, setAllWaves] = React.useState([])
+
 async function getAllWaves() {
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
