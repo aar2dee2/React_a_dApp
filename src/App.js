@@ -65,7 +65,7 @@ const wave = async () => {
   const signer = provider.getSigner();
   const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
   
-  let waveCount = await wavePortalContract.getTotalWaves()
+  let waveCount = await wavePortalContract.getAllWaves()
   console.log("Retrieved total wave count ...", waveCount.toNumber())
 
   const waveTxn = await wavePortalContract.wave("this is a message", { gasLimit: 300000 })
@@ -74,7 +74,7 @@ const wave = async () => {
   await waveTxn.wait()
   console.log("Mined...", waveTxn.hash)
 
-  waveCount = await wavePortalContract.getTotalWaves()
+  waveCount = await wavePortalContract.getAllWaves()
   console.log("Retrieved Total Wave Count...", waveCount.toNumber())
     
 }
