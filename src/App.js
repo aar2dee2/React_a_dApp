@@ -68,7 +68,7 @@ const wave = async () => {
   //let waveCount = await wavePortalContract.getAllWaves()
   //console.log("Retrieved total wave count ...", waveCount.toNumber())
 
-  const waveTxn = await wavePortalContract.wave("this is a message", { gasLimit: 300000 })
+  const waveTxn = await wavePortalContract.wave("this is a message", { gasLimit: 600000 })
   // waveportalContract.wave(message, { gasLimit: 300000 })
   console.log("Mining...", waveTxn.hash)
   await waveTxn.wait()
